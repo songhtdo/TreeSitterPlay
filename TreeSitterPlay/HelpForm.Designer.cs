@@ -44,7 +44,7 @@
             this.textBox1.Size = new System.Drawing.Size(408, 179);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "Alt+S: One click paste and parse data\r\nAlt+V: Paste Data\r\nAlt+P: Parse Data\r\nAlt+" +
-    "E: Expand All\r\nAlt+G: Fold All\r\nAlt+N: Clear Data";
+    "E: Expand All\r\nAlt+G: Collapse All\r\nAlt+N: Clear Data";
             this.textBox1.WordWrap = false;
             // 
             // label1
@@ -79,6 +79,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "HelpForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Help";
             this.ResumeLayout(false);

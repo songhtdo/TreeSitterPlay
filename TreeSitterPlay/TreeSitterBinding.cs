@@ -471,7 +471,7 @@ namespace GitHub.TreeSitter
         public bool has_error() { return ts_node_has_error(this); }
         public TSNode parent() { return ts_node_parent(this); }
         public TSNode child(uint index) { return ts_node_child(this, index); }
-        public IntPtr field_name_for_child(uint index) { return ts_node_field_name_for_child(this, index); }
+        public string field_name_for_child(uint index) { var dat = ts_node_field_name_for_child(this, index); var str = Marshal.PtrToStringAnsi(dat); return str; }
         public uint child_count() { return ts_node_child_count(this); }
         public TSNode named_child(uint index) { return ts_node_named_child(this, index); }
         public uint named_child_count() { return ts_node_named_child_count(this); }

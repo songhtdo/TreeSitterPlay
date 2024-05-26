@@ -1,0 +1,1 @@
+1.  richtextbox multi line set red color;

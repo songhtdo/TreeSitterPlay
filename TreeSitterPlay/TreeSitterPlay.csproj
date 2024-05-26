@@ -113,6 +113,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\collapse.png" />
+    <None Include="Resources\ZoomHS.png" />
+    <None Include="Resources\copy.png" />
+    <None Include="Resources\copysexpr.png" />
+    <None Include="Resources\paste.png" />
     <Content Include="tree-sitter.ico" />
     <None Include="Resources\parse.png" />
     <None Include="Resources\clear.png" />
