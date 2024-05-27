@@ -18,6 +18,7 @@ namespace TreeSitterPlay
         private const string ROW_MATCH_PAT = @"^({0})\s|\s({0})\s|\s({0})$|^({0})$";
         private KeyMessageFilter keyFilter = null;
         private Dictionary<string, string> lang_mapping = null;
+        private List<KeyValuePair<int, int>> srcRowLengths = new List<KeyValuePair<int, int>>();
         private LanguageEntry lang = null;
         private TreeNode matchNode = null;
 
@@ -182,6 +183,7 @@ namespace TreeSitterPlay
             this.tv.Nodes.Clear();
             this.rboxExpr.Clear();
             this.cboNodes.Items.Clear();
+            this.srcRowLengths.Clear();
         }
         private void TsbtnParse_Click(object sender, EventArgs e)
         {
@@ -197,6 +199,8 @@ namespace TreeSitterPlay
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            this.rtbx.ResetSelected();
+            this.srcRowLengths = this.rtbx.ToRows();
 
             var parser = new TSParser();
             TSLanguage raw_lang = new TSLanguage(lang.new_fn());
@@ -316,7 +320,7 @@ namespace TreeSitterPlay
                 return;
             }
             this.tv.SelectedNode = this.matchNode;
-            this.tv.SelectedNode.ForeColor = Color.Red;
+            //this.tv.SelectedNode.ForeColor = Color.Red;
             this.tv.Focus();
         }
 
@@ -437,40 +441,40 @@ namespace TreeSitterPlay
             {
                 return;
             }
+            this.rtbx.ResetSelected();
+
             PointRange range_data = (PointRange)e.Node.Tag;
-            int start = 0, end = 0;
-            uint row = 0;
-            foreach (string line in this.rtbx.Lines)
+            int total_start_pos = 0;
+            for(int i=0;i<this.srcRowLengths.Count;i++)
             {
-                if(row > range_data.end_pt.row)
+                var curr = this.srcRowLengths[i];
+                if(i == range_data.start_pt.row)
+                {
+                    int curr_length = 0;
+                    if(range_data.end_pt.row == range_data.start_pt.row)
+                    {
+                        curr_length = Convert.ToInt32(range_data.end_pt.column - range_data.start_pt.column);
+                    }
+                    else
+                    {
+                        curr_length = curr.Value - Convert.ToInt32(range_data.start_pt.column);
+                    }
+                    this.rtbx.UpdateSelected(total_start_pos + Convert.ToInt32(range_data.start_pt.column), curr_length);
+                }
+                else if(i > range_data.start_pt.row && i < range_data.end_pt.row)
+                {
+                    this.rtbx.UpdateSelected(total_start_pos, curr.Value);
+                }
+                else if(i == range_data.end_pt.row)
+                {
+                    this.rtbx.UpdateSelected(total_start_pos, Convert.ToInt32(range_data.end_pt.column));
+                }
+                else if(i > range_data.end_pt.row)
                 {
                     break;
                 }
-                if(row < range_data.start_pt.row)
-                {
-                    start += line.Length;
-                }
-                if(row < range_data.end_pt.row)
-                {
-                    end += line.Length;
-                }
+                total_start_pos += curr.Value;
             }
-            start += Convert.ToInt32(range_data.start_pt.column);
-            end += Convert.ToInt32(range_data.end_pt.column);
-            int total = end - start;
-            this.SetRedAndBoldText(this.rtbx, range_data.text, start);
-        }
-        private void SetRedAndBoldText(RichTextBox textbox, string text, int startIndex)
-        {
-            textbox.SelectionStart = 0;
-            textbox.SelectionLength = textbox.TextLength;
-            textbox.SelectionColor = textbox.ForeColor;
-            textbox.SelectionFont = textbox.Font;
-
-            textbox.SelectionStart = startIndex;
-            textbox.SelectionLength = text.Length;
-            textbox.SelectionColor = Color.Red;
-            textbox.SelectionFont = new Font(textbox.Font, FontStyle.Bold);
         }
     }
 }

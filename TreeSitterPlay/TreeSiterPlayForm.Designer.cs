@@ -30,12 +30,21 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeSiterPlayForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbtnClear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnPaste = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnParse = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCopyTree = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCopySExpr = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnExpandAll = new System.Windows.Forms.ToolStripButton();
             this.tsbtnExpand = new System.Windows.Forms.ToolStripButton();
             this.tsbtnCollapse = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCollapseAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnHelp = new System.Windows.Forms.ToolStripButton();
             this.tsbtnAbout = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnExit = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rtbx = new System.Windows.Forms.RichTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -53,15 +62,6 @@
             this.cboLang = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tsbtnClear = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnPaste = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnParse = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCopyTree = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCopySExpr = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnExpandAll = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCollapseAll = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnHelp = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnExit = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -100,10 +100,63 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tsbtnClear
+            // 
+            this.tsbtnClear.Image = global::TreeSitterPlay.Properties.Resources.clear;
+            this.tsbtnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnClear.Name = "tsbtnClear";
+            this.tsbtnClear.Size = new System.Drawing.Size(69, 45);
+            this.tsbtnClear.Text = "Clear";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 48);
+            // 
+            // tsbtnPaste
+            // 
+            this.tsbtnPaste.Image = global::TreeSitterPlay.Properties.Resources.paste;
+            this.tsbtnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnPaste.Name = "tsbtnPaste";
+            this.tsbtnPaste.Size = new System.Drawing.Size(71, 45);
+            this.tsbtnPaste.Text = "Paste";
+            // 
+            // tsbtnParse
+            // 
+            this.tsbtnParse.Image = global::TreeSitterPlay.Properties.Resources.parse;
+            this.tsbtnParse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnParse.Name = "tsbtnParse";
+            this.tsbtnParse.Size = new System.Drawing.Size(71, 45);
+            this.tsbtnParse.Text = "Parse";
+            // 
+            // tsbtnCopyTree
+            // 
+            this.tsbtnCopyTree.Image = global::TreeSitterPlay.Properties.Resources.copy;
+            this.tsbtnCopyTree.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCopyTree.Name = "tsbtnCopyTree";
+            this.tsbtnCopyTree.Size = new System.Drawing.Size(102, 45);
+            this.tsbtnCopyTree.Text = "CopyTree";
+            // 
+            // tsbtnCopySExpr
+            // 
+            this.tsbtnCopySExpr.Image = global::TreeSitterPlay.Properties.Resources.copysexpr;
+            this.tsbtnCopySExpr.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCopySExpr.Name = "tsbtnCopySExpr";
+            this.tsbtnCopySExpr.Size = new System.Drawing.Size(111, 45);
+            this.tsbtnCopySExpr.Text = "CopySExpr";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 48);
+            // 
+            // tsbtnExpandAll
+            // 
+            this.tsbtnExpandAll.Image = global::TreeSitterPlay.Properties.Resources.expand;
+            this.tsbtnExpandAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnExpandAll.Name = "tsbtnExpandAll";
+            this.tsbtnExpandAll.Size = new System.Drawing.Size(110, 45);
+            this.tsbtnExpandAll.Text = "Expand All";
             // 
             // tsbtnExpand
             // 
@@ -117,15 +170,26 @@
             this.tsbtnCollapse.Size = new System.Drawing.Size(125, 45);
             this.tsbtnCollapse.Text = "Collapse Node";
             // 
+            // tsbtnCollapseAll
+            // 
+            this.tsbtnCollapseAll.Image = global::TreeSitterPlay.Properties.Resources.collapse;
+            this.tsbtnCollapseAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCollapseAll.Name = "tsbtnCollapseAll";
+            this.tsbtnCollapseAll.Size = new System.Drawing.Size(118, 45);
+            this.tsbtnCollapseAll.Text = "Collapse All";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 48);
             // 
-            // toolStripSeparator3
+            // tsbtnHelp
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 48);
+            this.tsbtnHelp.Image = global::TreeSitterPlay.Properties.Resources.info;
+            this.tsbtnHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnHelp.Name = "tsbtnHelp";
+            this.tsbtnHelp.Size = new System.Drawing.Size(77, 45);
+            this.tsbtnHelp.Text = "Help...";
             // 
             // tsbtnAbout
             // 
@@ -133,6 +197,14 @@
             this.tsbtnAbout.Name = "tsbtnAbout";
             this.tsbtnAbout.Size = new System.Drawing.Size(73, 45);
             this.tsbtnAbout.Text = "About...";
+            // 
+            // tsbtnExit
+            // 
+            this.tsbtnExit.Image = global::TreeSitterPlay.Properties.Resources.exit;
+            this.tsbtnExit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnExit.Name = "tsbtnExit";
+            this.tsbtnExit.Size = new System.Drawing.Size(57, 45);
+            this.tsbtnExit.Text = "Exit";
             // 
             // splitContainer1
             // 
@@ -321,78 +393,6 @@
             this.label1.Size = new System.Drawing.Size(71, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Layout:";
-            // 
-            // tsbtnClear
-            // 
-            this.tsbtnClear.Image = global::TreeSitterPlay.Properties.Resources.clear;
-            this.tsbtnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnClear.Name = "tsbtnClear";
-            this.tsbtnClear.Size = new System.Drawing.Size(105, 45);
-            this.tsbtnClear.Text = "ClearData";
-            // 
-            // tsbtnPaste
-            // 
-            this.tsbtnPaste.Image = global::TreeSitterPlay.Properties.Resources.paste;
-            this.tsbtnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnPaste.Name = "tsbtnPaste";
-            this.tsbtnPaste.Size = new System.Drawing.Size(71, 45);
-            this.tsbtnPaste.Text = "Paste";
-            // 
-            // tsbtnParse
-            // 
-            this.tsbtnParse.Image = global::TreeSitterPlay.Properties.Resources.parse;
-            this.tsbtnParse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnParse.Name = "tsbtnParse";
-            this.tsbtnParse.Size = new System.Drawing.Size(71, 45);
-            this.tsbtnParse.Text = "Parse";
-            // 
-            // tsbtnCopyTree
-            // 
-            this.tsbtnCopyTree.Image = global::TreeSitterPlay.Properties.Resources.copy;
-            this.tsbtnCopyTree.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCopyTree.Name = "tsbtnCopyTree";
-            this.tsbtnCopyTree.Size = new System.Drawing.Size(102, 45);
-            this.tsbtnCopyTree.Text = "CopyTree";
-            // 
-            // tsbtnCopySExpr
-            // 
-            this.tsbtnCopySExpr.Image = global::TreeSitterPlay.Properties.Resources.copysexpr;
-            this.tsbtnCopySExpr.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCopySExpr.Name = "tsbtnCopySExpr";
-            this.tsbtnCopySExpr.Size = new System.Drawing.Size(111, 45);
-            this.tsbtnCopySExpr.Text = "CopySExpr";
-            // 
-            // tsbtnExpandAll
-            // 
-            this.tsbtnExpandAll.Image = global::TreeSitterPlay.Properties.Resources.expand;
-            this.tsbtnExpandAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnExpandAll.Name = "tsbtnExpandAll";
-            this.tsbtnExpandAll.Size = new System.Drawing.Size(110, 45);
-            this.tsbtnExpandAll.Text = "Expand All";
-            // 
-            // tsbtnCollapseAll
-            // 
-            this.tsbtnCollapseAll.Image = global::TreeSitterPlay.Properties.Resources.collapse;
-            this.tsbtnCollapseAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCollapseAll.Name = "tsbtnCollapseAll";
-            this.tsbtnCollapseAll.Size = new System.Drawing.Size(118, 45);
-            this.tsbtnCollapseAll.Text = "Collapse All";
-            // 
-            // tsbtnHelp
-            // 
-            this.tsbtnHelp.Image = global::TreeSitterPlay.Properties.Resources.info;
-            this.tsbtnHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnHelp.Name = "tsbtnHelp";
-            this.tsbtnHelp.Size = new System.Drawing.Size(77, 45);
-            this.tsbtnHelp.Text = "Help...";
-            // 
-            // tsbtnExit
-            // 
-            this.tsbtnExit.Image = global::TreeSitterPlay.Properties.Resources.exit;
-            this.tsbtnExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnExit.Name = "tsbtnExit";
-            this.tsbtnExit.Size = new System.Drawing.Size(57, 45);
-            this.tsbtnExit.Text = "Exit";
             // 
             // TreeSiterPlayForm
             // 
