@@ -133,6 +133,16 @@ namespace TreeSitterPlay.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap new_instance {
+            get {
+                object obj = ResourceManager.GetObject("new-instance", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap parse {
             get {
                 object obj = ResourceManager.GetObject("parse", resourceCulture);

@@ -72,7 +72,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RichTextBoxExtensions.cs" />
+    <Compile Include="ControlExtensions.cs" />
     <Compile Include="SExpr.cs" />
     <Compile Include="TreeSitterLanguage.cs" />
     <Compile Include="TreeSitterBinding.cs" />
@@ -118,6 +118,7 @@
     <None Include="Resources\copy.png" />
     <None Include="Resources\copysexpr.png" />
     <None Include="Resources\paste.png" />
+    <None Include="Resources\new-instance.png" />
     <Content Include="tree-sitter.ico" />
     <None Include="Resources\parse.png" />
     <None Include="Resources\clear.png" />

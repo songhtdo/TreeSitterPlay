@@ -51,17 +51,30 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tv = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnNextNodes = new System.Windows.Forms.Button();
+            this.lblNodeTotal = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblNodePos = new System.Windows.Forms.Label();
+            this.btnNextNode = new System.Windows.Forms.Button();
             this.cboNodes = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.rboxExpr = new System.Windows.Forms.RichTextBox();
+            this.rtbxExpr = new System.Windows.Forms.RichTextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.lblExprTotal = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lblExprPos = new System.Windows.Forms.Label();
+            this.btnNextExpr = new System.Windows.Forms.Button();
+            this.cboExprs = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rboVertical = new System.Windows.Forms.RadioButton();
             this.rboHorizontal = new System.Windows.Forms.RadioButton();
             this.cboLang = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnPrevNode = new System.Windows.Forms.Button();
+            this.btnPrevExpr = new System.Windows.Forms.Button();
+            this.tsbtnNewInstance = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -71,6 +84,7 @@
             this.tabPage1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,6 +93,7 @@
             this.toolStrip1.AutoSize = false;
             this.toolStrip1.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbtnNewInstance,
             this.tsbtnClear,
             this.toolStripSeparator3,
             this.tsbtnPaste,
@@ -96,7 +111,7 @@
             this.tsbtnExit});
             this.toolStrip1.Location = new System.Drawing.Point(9, 9);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1307, 48);
+            this.toolStrip1.Size = new System.Drawing.Size(1327, 48);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -220,8 +235,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(1307, 590);
-            this.splitContainer1.SplitterDistance = 292;
+            this.splitContainer1.Size = new System.Drawing.Size(1327, 590);
+            this.splitContainer1.SplitterDistance = 296;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -230,7 +245,7 @@
             this.rtbx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbx.Location = new System.Drawing.Point(0, 0);
             this.rtbx.Name = "rtbx";
-            this.rtbx.Size = new System.Drawing.Size(290, 588);
+            this.rtbx.Size = new System.Drawing.Size(294, 588);
             this.rtbx.TabIndex = 0;
             this.rtbx.Text = "";
             // 
@@ -244,7 +259,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1008, 588);
+            this.tabControl1.Size = new System.Drawing.Size(1024, 588);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
             // 
@@ -273,29 +288,64 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.btnNextNodes);
+            this.panel2.Controls.Add(this.lblNodeTotal);
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.lblNodePos);
+            this.panel2.Controls.Add(this.btnNextNode);
             this.panel2.Controls.Add(this.cboNodes);
             this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.btnPrevNode);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(3, 496);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(994, 49);
             this.panel2.TabIndex = 2;
             // 
-            // btnNextNodes
+            // lblNodeTotal
             // 
-            this.btnNextNodes.Location = new System.Drawing.Point(541, 8);
-            this.btnNextNodes.Name = "btnNextNodes";
-            this.btnNextNodes.Size = new System.Drawing.Size(122, 33);
-            this.btnNextNodes.TabIndex = 2;
-            this.btnNextNodes.Text = "Next";
-            this.btnNextNodes.UseVisualStyleBackColor = true;
+            this.lblNodeTotal.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblNodeTotal.Location = new System.Drawing.Point(652, 9);
+            this.lblNodeTotal.Name = "lblNodeTotal";
+            this.lblNodeTotal.Size = new System.Drawing.Size(43, 33);
+            this.lblNodeTotal.TabIndex = 4;
+            this.lblNodeTotal.Text = "0";
+            this.lblNodeTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.Location = new System.Drawing.Point(635, 17);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(17, 16);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "/";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblNodePos
+            // 
+            this.lblNodePos.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblNodePos.Location = new System.Drawing.Point(590, 9);
+            this.lblNodePos.Name = "lblNodePos";
+            this.lblNodePos.Size = new System.Drawing.Size(48, 33);
+            this.lblNodePos.TabIndex = 3;
+            this.lblNodePos.Text = "0";
+            this.lblNodePos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // btnNextNode
+            // 
+            this.btnNextNode.Location = new System.Drawing.Point(830, 9);
+            this.btnNextNode.Name = "btnNextNode";
+            this.btnNextNode.Size = new System.Drawing.Size(122, 33);
+            this.btnNextNode.TabIndex = 2;
+            this.btnNextNode.Text = "Next";
+            this.btnNextNode.UseVisualStyleBackColor = true;
             // 
             // cboNodes
             // 
             this.cboNodes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNodes.FormattingEnabled = true;
-            this.cboNodes.Location = new System.Drawing.Point(75, 13);
+            this.cboNodes.Location = new System.Drawing.Point(135, 13);
             this.cboNodes.Name = "cboNodes";
             this.cboNodes.Size = new System.Drawing.Size(450, 24);
             this.cboNodes.TabIndex = 1;
@@ -305,29 +355,103 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(17, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(56, 16);
+            this.label3.Size = new System.Drawing.Size(112, 16);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Nodes:";
+            this.label3.Text = "Select Nodes:";
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.rboxExpr);
+            this.tabPage2.Controls.Add(this.rtbxExpr);
+            this.tabPage2.Controls.Add(this.panel3);
             this.tabPage2.Location = new System.Drawing.Point(4, 36);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1000, 548);
+            this.tabPage2.Size = new System.Drawing.Size(1016, 548);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "S-Exprssion Data";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // rboxExpr
+            // rtbxExpr
             // 
-            this.rboxExpr.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rboxExpr.Location = new System.Drawing.Point(3, 3);
-            this.rboxExpr.Name = "rboxExpr";
-            this.rboxExpr.Size = new System.Drawing.Size(994, 542);
-            this.rboxExpr.TabIndex = 3;
-            this.rboxExpr.Text = "";
+            this.rtbxExpr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbxExpr.Location = new System.Drawing.Point(3, 3);
+            this.rtbxExpr.Name = "rtbxExpr";
+            this.rtbxExpr.Size = new System.Drawing.Size(1010, 493);
+            this.rtbxExpr.TabIndex = 3;
+            this.rtbxExpr.Text = "";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.lblExprTotal);
+            this.panel3.Controls.Add(this.label7);
+            this.panel3.Controls.Add(this.lblExprPos);
+            this.panel3.Controls.Add(this.btnNextExpr);
+            this.panel3.Controls.Add(this.cboExprs);
+            this.panel3.Controls.Add(this.label4);
+            this.panel3.Controls.Add(this.btnPrevExpr);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(3, 496);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1010, 49);
+            this.panel3.TabIndex = 4;
+            // 
+            // lblExprTotal
+            // 
+            this.lblExprTotal.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblExprTotal.Location = new System.Drawing.Point(652, 9);
+            this.lblExprTotal.Name = "lblExprTotal";
+            this.lblExprTotal.Size = new System.Drawing.Size(43, 33);
+            this.lblExprTotal.TabIndex = 7;
+            this.lblExprTotal.Text = "0";
+            this.lblExprTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(635, 17);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(17, 16);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "/";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblExprPos
+            // 
+            this.lblExprPos.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblExprPos.Location = new System.Drawing.Point(590, 9);
+            this.lblExprPos.Name = "lblExprPos";
+            this.lblExprPos.Size = new System.Drawing.Size(48, 33);
+            this.lblExprPos.TabIndex = 6;
+            this.lblExprPos.Text = "0";
+            this.lblExprPos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // btnNextExpr
+            // 
+            this.btnNextExpr.Location = new System.Drawing.Point(830, 9);
+            this.btnNextExpr.Name = "btnNextExpr";
+            this.btnNextExpr.Size = new System.Drawing.Size(122, 33);
+            this.btnNextExpr.TabIndex = 2;
+            this.btnNextExpr.Text = "Next";
+            this.btnNextExpr.UseVisualStyleBackColor = true;
+            // 
+            // cboExprs
+            // 
+            this.cboExprs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboExprs.FormattingEnabled = true;
+            this.cboExprs.Location = new System.Drawing.Point(135, 13);
+            this.cboExprs.Name = "cboExprs";
+            this.cboExprs.Size = new System.Drawing.Size(450, 24);
+            this.cboExprs.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(17, 17);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 16);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Select Exprs:";
             // 
             // panel1
             // 
@@ -339,7 +463,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(9, 57);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1307, 53);
+            this.panel1.Size = new System.Drawing.Size(1327, 53);
             this.panel1.TabIndex = 2;
             // 
             // rboVertical
@@ -394,11 +518,37 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Layout:";
             // 
+            // btnPrevNode
+            // 
+            this.btnPrevNode.Location = new System.Drawing.Point(694, 9);
+            this.btnPrevNode.Name = "btnPrevNode";
+            this.btnPrevNode.Size = new System.Drawing.Size(122, 33);
+            this.btnPrevNode.TabIndex = 5;
+            this.btnPrevNode.Text = "Previous";
+            this.btnPrevNode.UseVisualStyleBackColor = true;
+            // 
+            // btnPrevExpr
+            // 
+            this.btnPrevExpr.Location = new System.Drawing.Point(694, 9);
+            this.btnPrevExpr.Name = "btnPrevExpr";
+            this.btnPrevExpr.Size = new System.Drawing.Size(122, 33);
+            this.btnPrevExpr.TabIndex = 8;
+            this.btnPrevExpr.Text = "Previous";
+            this.btnPrevExpr.UseVisualStyleBackColor = true;
+            // 
+            // tsbtnNewInstance
+            // 
+            this.tsbtnNewInstance.Image = global::TreeSitterPlay.Properties.Resources.new_instance;
+            this.tsbtnNewInstance.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnNewInstance.Name = "tsbtnNewInstance";
+            this.tsbtnNewInstance.Size = new System.Drawing.Size(129, 45);
+            this.tsbtnNewInstance.Text = "NewInstance";
+            // 
             // TreeSiterPlayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1325, 709);
+            this.ClientSize = new System.Drawing.Size(1345, 709);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
@@ -418,6 +568,8 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -440,7 +592,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tsbtnHelp;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button btnNextNodes;
+        private System.Windows.Forms.Button btnNextNode;
         private System.Windows.Forms.ComboBox cboNodes;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripButton tsbtnCopyTree;
@@ -448,7 +600,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.RichTextBox rboxExpr;
+        private System.Windows.Forms.RichTextBox rtbxExpr;
         private System.Windows.Forms.ToolStripButton tsbtnParse;
         private System.Windows.Forms.ToolStripButton tsbtnExpand;
         private System.Windows.Forms.ToolStripButton tsbtnCollapse;
@@ -459,6 +611,19 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripButton tsbtnPaste;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnNextExpr;
+        private System.Windows.Forms.ComboBox cboExprs;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblNodeTotal;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblNodePos;
+        private System.Windows.Forms.Label lblExprTotal;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblExprPos;
+        private System.Windows.Forms.Button btnPrevNode;
+        private System.Windows.Forms.Button btnPrevExpr;
+        private System.Windows.Forms.ToolStripButton tsbtnNewInstance;
     }
 }
 

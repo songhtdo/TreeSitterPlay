@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace TreeSitterPlay
 {
-    static class RichTextBoxExtensions
+    static class ControlExtensions
     {
         public static List<KeyValuePair<int, int>> ToRows(this RichTextBox rtbx)
         {
@@ -35,6 +35,19 @@ namespace TreeSitterPlay
             }
             return rows;
         }
+        public static List<KeyValuePair<int, int>> MatchValues(this RichTextBox rtbx, Regex regex)
+        {
+            List<KeyValuePair<int, int>> rows = new List<KeyValuePair<int, int>>();
+            var matchedRes = regex.Matches(rtbx.Text);
+            if (matchedRes.Count > 0)
+            {
+                foreach (Match match in matchedRes)
+                {
+                    rows.Add(new KeyValuePair<int, int>(match.Index, match.Length));
+                }
+            }
+            return rows;
+        }
 
         public static void ResetSelected(this RichTextBox rtbx)
         {
@@ -50,6 +63,15 @@ namespace TreeSitterPlay
             rtbx.SelectionLength = length;
             rtbx.SelectionColor = Color.Red;
             rtbx.SelectionFont = new Font(rtbx.Font, FontStyle.Bold);
+        }
+
+        public static void RebindItems(this ComboBox cbo, IEnumerable<string> data)
+        {
+            cbo.Items.Clear();
+            foreach(var item in data)
+            {
+                cbo.Items.Add(item);
+            }
         }
     }
 }

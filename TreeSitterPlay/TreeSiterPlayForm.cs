@@ -8,19 +8,25 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 using GitHub.TreeSitter;
 
 namespace TreeSitterPlay
 {
     public partial class TreeSiterPlayForm : Form
     {
-        // (struct_specifier 或(qualified_identifier 
-        private const string ROW_MATCH_PAT = @"^({0})\s|\s({0})\s|\s({0})$|^({0})$";
+        // (struct_specifier 或 (qualified_identifier 
+        private const string NODE_MATCH_PAT = @"^({0})\s|\s({0})\s|\s({0})$|^({0})$";
+        // (qualified_identifier 或 (identifier)
+        private const string EXPR_MATCH_PAT = @"\({0}\)|\({0}";
         private KeyMessageFilter keyFilter = null;
         private Dictionary<string, string> lang_mapping = null;
         private List<KeyValuePair<int, int>> srcRowLengths = new List<KeyValuePair<int, int>>();
         private LanguageEntry lang = null;
-        private TreeNode matchNode = null;
+        private List<TreeNode> matchedNodes = new List<TreeNode>();
+        private List<MatchedPoint> matchedExprs = new List<MatchedPoint>();
+        private int matchedNodePos = -1;
+        private int matchedExprPos = -1;
 
         public TreeSiterPlayForm()
         {
@@ -42,10 +48,16 @@ namespace TreeSitterPlay
             this.tsbtnCopySExpr.Click += TsbtnCopySExpr_Click;
             this.cboNodes.SelectedIndexChanged += CboNodes_SelectedIndexChanged;
             this.tsbtnPaste.Click += TsbtnPaste_Click;
-            this.btnNextNodes.Click += BtnNextNodes_Click;
+            this.btnNextNode.Click += BtnNextNode_Click;
+            this.btnPrevNode.Click += BtnPrevNode_Click;
             this.tsbtnExpand.Click += TsbtnExpand_Click;
             this.tsbtnCollapse.Click += TsbtnCollapse_Click;
+            this.cboExprs.SelectedIndexChanged += CboExprs_SelectedIndexChanged;
+            this.btnNextExpr.Click += BtnNextExpr_Click;
+            this.btnPrevExpr.Click += BtnPrevExpr_Click;
+            this.tsbtnNewInstance.Click += TsbtnNewInstance_Click;
         }
+
 
         ~TreeSiterPlayForm()
         {
@@ -67,6 +79,10 @@ namespace TreeSitterPlay
             {
                 this.tsbtnClear.PerformClick();
                 this.rtbx.Text = Clipboard.GetText();
+            });
+            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.Enter, () =>
+            {
+                this.tsbtnParse.PerformClick();
             });
             this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.P, () =>
             {
@@ -94,6 +110,13 @@ namespace TreeSitterPlay
                 this.cboLang.SelectedIndex = 0;
             }
             this.cboLang.DropDownStyle = ComboBoxStyle.DropDownList;           
+        }
+        private void TsbtnNewInstance_Click(object sender, EventArgs e)
+        {
+            // 创建一个新的进程对象
+            Process newProcess = new Process();
+            newProcess.StartInfo.FileName = Application.ExecutablePath;
+            newProcess.Start(); // 启动新实例
         }
         private void TsbtnExit_Click(object sender, EventArgs e)
         {
@@ -153,7 +176,7 @@ namespace TreeSitterPlay
         {
             if(this.tv.SelectedNode != null)
             {
-                this.tv.SelectedNode.Expand();
+                this.tv.SelectedNode.ExpandAll();
             }
         }
         private void TsbtnPaste_Click(object sender, EventArgs e)
@@ -181,9 +204,12 @@ namespace TreeSitterPlay
         {
             this.rtbx.Clear();
             this.tv.Nodes.Clear();
-            this.rboxExpr.Clear();
+            this.rtbxExpr.Clear();
             this.cboNodes.Items.Clear();
+            this.cboExprs.Items.Clear();
             this.srcRowLengths.Clear();
+            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
+            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
         }
         private void TsbtnParse_Click(object sender, EventArgs e)
         {
@@ -199,6 +225,15 @@ namespace TreeSitterPlay
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            this.tv.Nodes.Clear();
+            this.cboNodes.Items.Clear();
+            this.matchedNodes.Clear();
+            this.matchedExprs.Clear();
+            this.matchedNodePos = 0;
+            this.matchedExprPos = 0;
+            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
+            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
+
             this.rtbx.ResetSelected();
             this.srcRowLengths = this.rtbx.ToRows();
 
@@ -212,9 +247,6 @@ namespace TreeSitterPlay
                 MessageBox.Show("Parse failed.", "TreeSitterPlay", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            this.tv.Nodes.Clear();
-            this.cboNodes.Items.Clear();
-            this.matchNode = null;
             HashSet<string> types = new HashSet<string>();
             this.bindingTree(raw_lang, this.rtbx.Text, tree.root_node(), this.tv.Nodes, types);
             this.tv.ExpandAll();
@@ -222,18 +254,19 @@ namespace TreeSitterPlay
             var sexp = tree.root_node().to_string();
             var sexp_fmt = new SExpr(TreeSitterLanguage.SEXPR_IDENT);
             var sexp_str = sexp_fmt.format(sexp);
-            this.rboxExpr.Text = sexp_str;
+            this.rtbxExpr.Text = sexp_str;
             //绑定到下拉列表
             List<string> sorts = types.ToList();
             sorts.Sort();
-            foreach(var item in sorts)
+            List<string> resorts = new List<string>();
+            foreach (var item in sorts)
             {
                 if (string.IsNullOrWhiteSpace(item))
                     continue;
                 char firstch = item[0];
-                if((firstch >= 'A' && firstch <= 'Z') || (firstch >= 'a' && firstch <= 'z'))
+                if ((firstch >= 'A' && firstch <= 'Z') || (firstch >= 'a' && firstch <= 'z'))
                 {
-                    this.cboNodes.Items.Add(item);
+                    resorts.Add(item);
                 }
             }
             foreach (var item in sorts)
@@ -243,9 +276,11 @@ namespace TreeSitterPlay
                 char firstch = item[0];
                 if (!(firstch >= 'A' && firstch <= 'Z') && !(firstch >= 'a' && firstch <= 'z'))
                 {
-                    this.cboNodes.Items.Add(item);
+                    resorts.Add(item);
                 }
             }
+            this.cboNodes.RebindItems(resorts);
+            this.cboExprs.RebindItems(resorts);
         }
         private string formatPoint(PointRange pt_range)
         {
@@ -287,104 +322,182 @@ namespace TreeSitterPlay
                 {
                     this.tv.SelectedNode.ForeColor = Color.Black;
                 }
-                this.matchNode = null;
-                this.resetQueryMatchNode(this.matchNode);
+                this.matchedNodes.Clear();
+                this.matchedNodePos = 0;
+                this.resetQueryMatchedNodes();
+                if(this.matchedNodes.Count > 0)
+                {
+                    this.matchedNodePos = 1;
+                }
+                this.resetMatchedNodePos(this.matchedNodePos);
             }
         }
-        private void BtnNextNodes_Click(object sender, EventArgs e)
+        private void BtnPrevNode_Click(object sender, EventArgs e)
         {
             if (this.cboNodes.SelectedIndex >= 0)
             {
+                if (this.matchedNodePos <= 1)
+                {
+                    string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
+                    MessageBox.Show(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected), "TreeSitterPlay",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.tv.Focus();
+                    return;
+                }
                 if (this.tv.SelectedNode != null)
                 {
                     this.tv.SelectedNode.ForeColor = Color.Black;
                 }
-                this.resetQueryMatchNode(this.matchNode);
+                this.matchedNodePos--;
+                this.resetMatchedNodePos(this.matchedNodePos);
             }
         }
-        private void resetQueryMatchNode(TreeNode prevNode)
+        private void BtnNextNode_Click(object sender, EventArgs e)
+        {
+            if (this.cboNodes.SelectedIndex >= 0)
+            {
+                if(this.matchedNodePos >= this.matchedNodes.Count)
+                {
+                    string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
+                    MessageBox.Show(string.Format("The query is already in the LAST match location, \r\n{0}.", selected), "TreeSitterPlay",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.tv.Focus();
+                    return;
+                }
+                if (this.tv.SelectedNode != null)
+                {
+                    this.tv.SelectedNode.ForeColor = Color.Black;
+                }
+                this.matchedNodePos++;
+                this.resetMatchedNodePos(this.matchedNodePos);
+            }
+        }
+        private void resetQueryMatchedNodes()
         {
             string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
-            var matchWord = string.Format(ROW_MATCH_PAT, selected);
+            var matchWord = string.Format(NODE_MATCH_PAT, selected);
             Regex matchReg = new Regex(matchWord);
-
-            TreeNode firstNode = (prevNode == null) ? this.tv.Nodes[0] : prevNode;
-            if(this.matchNode != firstNode && matchReg.Match(firstNode.Text).Success)
+            this.queryMatchedNodes(matchReg, this.tv.Nodes, this.matchedNodes);
+        }
+        private void queryMatchedNodes(Regex regex, TreeNodeCollection nodes, List<TreeNode> result)
+        {
+            foreach(TreeNode node in nodes)
             {
-                this.matchNode = firstNode;
+                if(regex.Match(node.Text).Success)
+                {
+                    result.Add(node);
+                }
+                if(node.Nodes.Count > 0)
+                {
+                    this.queryMatchedNodes(regex, node.Nodes, result);
+                }
             }
-            else if(!this.querySelectedNode(firstNode, matchReg, ref this.matchNode))
+        }
+        private void resetMatchedNodePos(int pos)
+        {
+            if(pos <= 0)
             {
+                pos = 1;
+            }
+            int total = this.matchedNodes.Count;
+            if(pos > total)
+            {
+                string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
                 MessageBox.Show(string.Format("No matching data found, {0}.", selected), "TreeSitterPlay",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            this.tv.SelectedNode = this.matchNode;
-            //this.tv.SelectedNode.ForeColor = Color.Red;
+            this.tv.SelectedNode = this.matchedNodes[pos - 1];
+            this.tv.SelectedNode.ExpandAll();
+            this.tv.SelectedNode.EnsureVisible();
             this.tv.Focus();
+
+            this.lblNodeTotal.Text = total.ToString();
+            this.lblNodePos.Text = pos.ToString();
+        }
+        private void BtnPrevExpr_Click(object sender, EventArgs e)
+        {
+            if (this.cboExprs.SelectedIndex >= 0)
+            {
+                if (this.matchedExprPos <= 1)
+                {
+                    string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
+                    MessageBox.Show(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected), "TreeSitterPlay",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.rtbxExpr.Focus();
+                    return;
+                }
+                this.rtbxExpr.ResetSelected();
+                this.matchedExprPos--;
+                this.resetMatchedExprPos(this.matchedExprPos);
+            }
+        }
+        private void BtnNextExpr_Click(object sender, EventArgs e)
+        {
+            if (this.cboExprs.SelectedIndex >= 0)
+            {
+                if (this.matchedExprPos >= this.matchedExprs.Count)
+                {
+                    string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
+                    MessageBox.Show(string.Format("The query is already in the LAST match location, \r\n{0}.", selected), "TreeSitterPlay",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.rtbxExpr.Focus();
+                    return;
+                }
+                this.rtbxExpr.ResetSelected();
+                this.matchedExprPos++;
+                this.resetMatchedExprPos(this.matchedExprPos);
+            }
+        }
+        private void CboExprs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.cboExprs.SelectedIndex >= 0)
+            {
+                this.rtbxExpr.ResetSelected();
+                this.matchedExprs.Clear();
+                this.matchedExprPos = 0;
+                this.resetQueryMatchedExprs();
+
+                if(this.matchedExprs.Count > 0)
+                {
+                    this.matchedExprPos = 1;
+                }
+                this.resetMatchedExprPos(this.matchedExprPos);
+            }
+        }
+        private void resetQueryMatchedExprs()
+        {
+            string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
+            var matchWord = string.Format(EXPR_MATCH_PAT, selected);
+            Regex matchReg = new Regex(matchWord);
+
+            var matchedrows = this.rtbxExpr.MatchValues(matchReg);
+            foreach(KeyValuePair<int, int> item in matchedrows)
+            {
+                this.matchedExprs.Add(new MatchedPoint { start = item.Key, length = item.Value });
+            }
         }
 
-        private bool querySelectedNode(TreeNode node, Regex regex, ref TreeNode matched)
+        private void resetMatchedExprPos(int pos)
         {
-            foreach(TreeNode sub in node.Nodes)
+            if (pos <= 0)
             {
-                if(this.queryMatchedNode(sub, regex, ref matched))
-                {
-                    return true;
-                }
+                pos = 1;
             }
-            return this.queryNextNode(node, regex, ref matched);
-        }
-        private bool queryMatchedNode(TreeNode node, Regex regex, ref TreeNode matched)
-        {
-            if ((this.matchNode != node) && regex.Match(node.Text).Success)
+            int total = this.matchedExprs.Count;
+            if (pos > total)
             {
-                matched = node;
-                return true;
+                string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
+                MessageBox.Show(string.Format("No matching data found, {0}.", selected), "TreeSitterPlay",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            foreach (TreeNode subnode in node.Nodes)
-            {
-                if (this.queryMatchedNode(subnode, regex, ref matched))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private bool queryNextNode(TreeNode node, Regex regex, ref TreeNode matched)
-        {
-            // Traverse next data
-            var nextNode = node.NextNode;
-            while (nextNode != null)
-            {
-                if(this.queryMatchedNode(nextNode, regex, ref matched))
-                {
-                    return true;
-                }
-                nextNode = nextNode.NextNode;
-            }
-            // Traverse parent next data
-            var curr = node.Parent;
-            while(curr != null)
-            {
-                if(curr.NextNode != null)
-                {
-                    break;
-                }
-                curr = curr.Parent;
-            }
-            if(curr != null && curr.NextNode != null)
-            {
-                if(this.queryMatchedNode(curr.NextNode, regex, ref matched))
-                {
-                    return true;
-                }
-                if(this.queryNextNode(curr.NextNode, regex, ref matched))
-                {
-                    return true;
-                }
-            }
-            return false;
+            var selectedPt = this.matchedExprs[pos - 1];
+            this.rtbxExpr.UpdateSelected(selectedPt.start, selectedPt.length);
+            this.rtbxExpr.Focus();
+
+            this.lblExprTotal.Text = total.ToString();
+            this.lblExprPos.Text = pos.ToString();
         }
 
         private void TsbtnCopyTree_Click(object sender, EventArgs e)
@@ -424,13 +537,13 @@ namespace TreeSitterPlay
         }
         private void TsbtnCopySExpr_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(this.rboxExpr.Text))
+            if(string.IsNullOrWhiteSpace(this.rtbxExpr.Text))
             {
                 MessageBox.Show("No data to copy", "TreeSitterPlay", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            Clipboard.SetText(this.rboxExpr.Text);
+            Clipboard.SetText(this.rtbxExpr.Text);
 
             MessageBox.Show("The S-Expression data has been copied to the clipboard", "TreeSitterPlay",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -475,6 +588,12 @@ namespace TreeSitterPlay
                 }
                 total_start_pos += curr.Value;
             }
+        }
+
+        private class MatchedPoint
+        {
+            public int start;
+            public int length;
         }
     }
 }
