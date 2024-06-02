@@ -36,7 +36,7 @@ namespace TreeSitterPlay
             this.tsbtnParse.Click += TsbtnParse_Click;
             this.tsbtnExpandAll.Click += TsbtnExpandAll_Click;
             this.tsbtnCollapseAll.Click += TsbtnCollapseAll_Click;
-            this.tsbtnClear.Click += TsbtnClear_Click;
+            this.tsbtnNewData.Click += TsbtnNewData_Click;
             this.tsbtnAbout.Click += TsbtnAbout_Click;
             this.tsbtnHelp.Click += TsbtnHelp_Click;
             this.tsbtnExit.Click += TsbtnExit_Click;
@@ -56,8 +56,9 @@ namespace TreeSitterPlay
             this.btnNextExpr.Click += BtnNextExpr_Click;
             this.btnPrevExpr.Click += BtnPrevExpr_Click;
             this.tsbtnNewInstance.Click += TsbtnNewInstance_Click;
+            this.tsbtnLoadFile.Click += TsbtnLoadFile_Click;
+            this.tsbtnSaveFile.Click += TsbtnSaveFile_Click;
         }
-
 
         ~TreeSiterPlayForm()
         {
@@ -71,13 +72,21 @@ namespace TreeSitterPlay
         {
             //注册事件
             this.keyFilter = new KeyMessageFilter(this.Handle);
+            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.O, () =>
+            {
+                this.tsbtnLoadFile.PerformClick();
+            });
+            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.S, () =>
+            {
+                this.tsbtnSaveFile.PerformClick();
+            });
             this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.S, () =>
             {
                 this.tsbtnPaste.PerformClick();
             });
             this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.V, () =>
             {
-                this.tsbtnClear.PerformClick();
+                this.tsbtnNewData.PerformClick();
                 this.rtbx.Text = Clipboard.GetText();
             });
             this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.Enter, () =>
@@ -96,7 +105,7 @@ namespace TreeSitterPlay
                 this.tsbtnCollapseAll.PerformClick();
             });
             this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.N, () => {
-                this.tsbtnClear.PerformClick();
+                this.tsbtnNewData.PerformClick();
             });
             this.keyFilter.StartFilter();
 
@@ -122,6 +131,58 @@ namespace TreeSitterPlay
         {
             this.Close();
         }
+        private void TsbtnSaveFile_Click(object sender, EventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(this.rtbx.Text))
+            {
+                this.ShowMessage("Failed to save, the content is empty.");
+                return;
+            }
+            using (SaveFileDialog sfdialog = new SaveFileDialog())
+            {
+                sfdialog.Filter = AppStrings.TREE_SITTER_FILEEXT + "|all files|*.*";
+                sfdialog.FilterIndex = 0;
+                var dialogRes = sfdialog.ShowDialog();
+                if (dialogRes == DialogResult.OK)
+                {
+                    var saveRes = FileVisitor.SaveFile(sfdialog.FileName, this.rtbx.Text);
+                    this.ShowMessage(saveRes ? string.Format("The file is saved successfully.\n{0}", sfdialog.FileName) 
+                        : string.Format("The file is saved failed.\n{0}", sfdialog.FileName));
+                }
+            }
+        }
+
+        private void TsbtnLoadFile_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(this.rtbx.Text))
+            {
+                if(this.ShowMessage("The current window has content, you are sure to load new content.\n Select \"Yes\" to continue loading, select \"No\" return no loading.", 
+                    MessageBoxButtons.YesNo) != DialogResult.OK)
+                {
+                    return;
+                }
+                this.ClearFormData();
+            }
+            using (OpenFileDialog ofdialog = new OpenFileDialog())
+            {
+                ofdialog.Filter = AppStrings.TREE_SITTER_FILEEXT + "|all files|*.*";
+                ofdialog.FilterIndex = 0;
+                var dialogRes = ofdialog.ShowDialog();
+                if(dialogRes == DialogResult.OK)
+                {
+                    string content = "";
+                    var openRes = FileVisitor.LoadFile(ofdialog.FileName, ref content);
+                    if(!openRes)
+                    {
+                        this.ShowMessage(string.Format("The file loading operation failed.\n{0}", ofdialog.FileName));
+                        return;
+                    }
+                    this.rtbx.Text = content;
+                    this.ReparseData();
+                }
+            }
+        }
+
         private void RboVertical_CheckedChanged(object sender, EventArgs e)
         {
             if(this.rboVertical.Checked)
@@ -147,8 +208,7 @@ namespace TreeSitterPlay
                     var lang_entry = TreeSitterLanguage.createLanguage(this.lang_mapping[selected_text]);
                     if(lang_entry == null)
                     {
-                        MessageBox.Show(string.Format("Load Language failed, \n{0}", this.lang_mapping[selected_text]),
-                            "TreeSitterPlay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.ShowMessage(string.Format("Load Language failed, \n{0}", this.lang_mapping[selected_text]));
                         return;
                     }
                     this.lang = lang_entry;
@@ -181,7 +241,7 @@ namespace TreeSitterPlay
         }
         private void TsbtnPaste_Click(object sender, EventArgs e)
         {
-            this.tsbtnClear.PerformClick();
+            this.tsbtnNewData.PerformClick();
             this.rtbx.Text = Clipboard.GetText();
             this.tsbtnParse.PerformClick();
         }
@@ -200,87 +260,21 @@ namespace TreeSitterPlay
                 form.ShowDialog(this);
             }
         }
-        private void TsbtnClear_Click(object sender, EventArgs e)
+        private void TsbtnNewData_Click(object sender, EventArgs e)
         {
-            this.rtbx.Clear();
-            this.tv.Nodes.Clear();
-            this.rtbxExpr.Clear();
-            this.cboNodes.Items.Clear();
-            this.cboExprs.Items.Clear();
-            this.srcRowLengths.Clear();
-            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
-            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
+            if(!string.IsNullOrWhiteSpace(this.rtbx.Text))
+            {
+                if(this.ShowMessage("Are you sure you want to erase the data? \nSelect \"Yes\" to continue emptying, select \"No\" to return not emptying", MessageBoxButtons.YesNo) 
+                    != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+            this.ClearFormData();
         }
         private void TsbtnParse_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(this.rtbx.Text))
-            {
-                MessageBox.Show("There is no content for parsing.", "TreeSitterPlay", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if(this.lang == null)
-            {
-                MessageBox.Show("Please select the language to be parsed first.", "TreeSitterPlay",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            this.tv.Nodes.Clear();
-            this.cboNodes.Items.Clear();
-            this.matchedNodes.Clear();
-            this.matchedExprs.Clear();
-            this.matchedNodePos = 0;
-            this.matchedExprPos = 0;
-            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
-            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
-
-            this.rtbx.ResetSelected();
-            this.srcRowLengths = this.rtbx.ToRows();
-
-            var parser = new TSParser();
-            TSLanguage raw_lang = new TSLanguage(lang.new_fn());
-            parser.set_language(raw_lang);
-
-            var tree = parser.parse_string(null, this.rtbx.Text);
-            if (tree == null)
-            {
-                MessageBox.Show("Parse failed.", "TreeSitterPlay", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            HashSet<string> types = new HashSet<string>();
-            this.bindingTree(raw_lang, this.rtbx.Text, tree.root_node(), this.tv.Nodes, types);
-            this.tv.ExpandAll();
-            //打印sexp
-            var sexp = tree.root_node().to_string();
-            var sexp_fmt = new SExpr(TreeSitterLanguage.SEXPR_IDENT);
-            var sexp_str = sexp_fmt.format(sexp);
-            this.rtbxExpr.Text = sexp_str;
-            //绑定到下拉列表
-            List<string> sorts = types.ToList();
-            sorts.Sort();
-            List<string> resorts = new List<string>();
-            foreach (var item in sorts)
-            {
-                if (string.IsNullOrWhiteSpace(item))
-                    continue;
-                char firstch = item[0];
-                if ((firstch >= 'A' && firstch <= 'Z') || (firstch >= 'a' && firstch <= 'z'))
-                {
-                    resorts.Add(item);
-                }
-            }
-            foreach (var item in sorts)
-            {
-                if (string.IsNullOrWhiteSpace(item))
-                    continue;
-                char firstch = item[0];
-                if (!(firstch >= 'A' && firstch <= 'Z') && !(firstch >= 'a' && firstch <= 'z'))
-                {
-                    resorts.Add(item);
-                }
-            }
-            this.cboNodes.RebindItems(resorts);
-            this.cboExprs.RebindItems(resorts);
+            this.ReparseData();
         }
         private string formatPoint(PointRange pt_range)
         {
@@ -339,8 +333,7 @@ namespace TreeSitterPlay
                 if (this.matchedNodePos <= 1)
                 {
                     string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
-                    MessageBox.Show(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected), "TreeSitterPlay",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.ShowMessage(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected));
                     this.tv.Focus();
                     return;
                 }
@@ -359,8 +352,7 @@ namespace TreeSitterPlay
                 if(this.matchedNodePos >= this.matchedNodes.Count)
                 {
                     string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
-                    MessageBox.Show(string.Format("The query is already in the LAST match location, \r\n{0}.", selected), "TreeSitterPlay",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.ShowMessage(string.Format("The query is already in the LAST match location, \r\n{0}.", selected));
                     this.tv.Focus();
                     return;
                 }
@@ -403,8 +395,7 @@ namespace TreeSitterPlay
             if(pos > total)
             {
                 string selected = this.cboNodes.Items[this.cboNodes.SelectedIndex].ToString();
-                MessageBox.Show(string.Format("No matching data found, {0}.", selected), "TreeSitterPlay",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.ShowMessage(string.Format("No matching data found, {0}.", selected));
                 return;
             }
             this.tv.SelectedNode = this.matchedNodes[pos - 1];
@@ -422,8 +413,7 @@ namespace TreeSitterPlay
                 if (this.matchedExprPos <= 1)
                 {
                     string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
-                    MessageBox.Show(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected), "TreeSitterPlay",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.ShowMessage(string.Format("The query is already in the FIRST match location, \r\n{0}.", selected));
                     this.rtbxExpr.Focus();
                     return;
                 }
@@ -439,8 +429,7 @@ namespace TreeSitterPlay
                 if (this.matchedExprPos >= this.matchedExprs.Count)
                 {
                     string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
-                    MessageBox.Show(string.Format("The query is already in the LAST match location, \r\n{0}.", selected), "TreeSitterPlay",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.ShowMessage(string.Format("The query is already in the LAST match location, \r\n{0}.", selected));
                     this.rtbxExpr.Focus();
                     return;
                 }
@@ -488,8 +477,7 @@ namespace TreeSitterPlay
             if (pos > total)
             {
                 string selected = this.cboExprs.Items[this.cboExprs.SelectedIndex].ToString();
-                MessageBox.Show(string.Format("No matching data found, {0}.", selected), "TreeSitterPlay",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.ShowMessage(string.Format("No matching data found, {0}.", selected));
                 return;
             }
             var selectedPt = this.matchedExprs[pos - 1];
@@ -504,8 +492,7 @@ namespace TreeSitterPlay
         {
             if (this.tv.Nodes.Count == 0)
             {
-                MessageBox.Show("No data to copy", "TreeSitterPlay",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.ShowMessage("No data to copy");
                 return;
             }
             StringBuilder builder = new StringBuilder();
@@ -513,8 +500,7 @@ namespace TreeSitterPlay
             string full_data = builder.ToString();
             Clipboard.SetText(full_data);
 
-            MessageBox.Show("The Tree data has been copied to the clipboard", "TreeSitterPlay",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.ShowMessage("The Tree data has been copied to the clipboard");
         }
         private void buildIdent(StringBuilder builder, int level)
         {
@@ -539,14 +525,12 @@ namespace TreeSitterPlay
         {
             if(string.IsNullOrWhiteSpace(this.rtbxExpr.Text))
             {
-                MessageBox.Show("No data to copy", "TreeSitterPlay", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.ShowMessage("No data to copy");
                 return;
             }
             Clipboard.SetText(this.rtbxExpr.Text);
 
-            MessageBox.Show("The S-Expression data has been copied to the clipboard", "TreeSitterPlay",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.ShowMessage("The S-Expression data has been copied to the clipboard");
         }
         private void Tv_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -588,6 +572,86 @@ namespace TreeSitterPlay
                 }
                 total_start_pos += curr.Value;
             }
+        }
+        private void ClearFormData()
+        {
+            this.rtbx.Clear();
+            this.tv.Nodes.Clear();
+            this.rtbxExpr.Clear();
+            this.cboNodes.Items.Clear();
+            this.cboExprs.Items.Clear();
+            this.srcRowLengths.Clear();
+            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
+            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
+        }
+        private void ReparseData()
+        {
+            if (string.IsNullOrWhiteSpace(this.rtbx.Text))
+            {
+                this.ShowMessage("There is no content for parsing.");
+                return;
+            }
+            if (this.lang == null)
+            {
+                this.ShowMessage("Please select the language to be parsed first.");
+                return;
+            }
+            this.tv.Nodes.Clear();
+            this.cboNodes.Items.Clear();
+            this.matchedNodes.Clear();
+            this.matchedExprs.Clear();
+            this.matchedNodePos = 0;
+            this.matchedExprPos = 0;
+            this.lblExprPos.Text = this.lblExprTotal.Text = "0";
+            this.lblNodePos.Text = this.lblNodeTotal.Text = "0";
+
+            this.rtbx.ResetSelected();
+            this.srcRowLengths = this.rtbx.ToRows();
+
+            var parser = new TSParser();
+            TSLanguage raw_lang = new TSLanguage(lang.new_fn());
+            parser.set_language(raw_lang);
+
+            var tree = parser.parse_string(null, this.rtbx.Text);
+            if (tree == null)
+            {
+                this.ShowMessage("Parse failed.");
+                return;
+            }
+            HashSet<string> types = new HashSet<string>();
+            this.bindingTree(raw_lang, this.rtbx.Text, tree.root_node(), this.tv.Nodes, types);
+            this.tv.ExpandAll();
+            //打印sexp
+            var sexp = tree.root_node().to_string();
+            var sexp_fmt = new SExpr(TreeSitterLanguage.SEXPR_IDENT);
+            var sexp_str = sexp_fmt.format(sexp);
+            this.rtbxExpr.Text = sexp_str;
+            //绑定到下拉列表
+            List<string> sorts = types.ToList();
+            sorts.Sort();
+            List<string> resorts = new List<string>();
+            foreach (var item in sorts)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+                char firstch = item[0];
+                if ((firstch >= 'A' && firstch <= 'Z') || (firstch >= 'a' && firstch <= 'z'))
+                {
+                    resorts.Add(item);
+                }
+            }
+            foreach (var item in sorts)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+                char firstch = item[0];
+                if (!(firstch >= 'A' && firstch <= 'Z') && !(firstch >= 'a' && firstch <= 'z'))
+                {
+                    resorts.Add(item);
+                }
+            }
+            this.cboNodes.RebindItems(resorts);
+            this.cboExprs.RebindItems(resorts);
         }
 
         private class MatchedPoint

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HelpForm));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
@@ -36,21 +37,20 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox1.Location = new System.Drawing.Point(25, 52);
+            this.textBox1.Location = new System.Drawing.Point(12, 44);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(408, 179);
+            this.textBox1.Size = new System.Drawing.Size(507, 232);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Alt+S: One click paste and parse data\r\nAlt+V: Paste Data\r\nAlt+P: Parse Data\r\nCtrl" +
-    "+Enter: Parse Data\r\nAlt+E: Expand All\r\nAlt+G: Collapse All\r\nAlt+N: Clear Data";
+            this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.WordWrap = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(32, 24);
+            this.label1.Location = new System.Drawing.Point(32, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 1;
@@ -59,7 +59,7 @@
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(242, 249);
+            this.btnOK.Location = new System.Drawing.Point(300, 294);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(133, 33);
             this.btnOK.TabIndex = 2;
@@ -71,7 +71,7 @@
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 306);
+            this.ClientSize = new System.Drawing.Size(541, 349);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);

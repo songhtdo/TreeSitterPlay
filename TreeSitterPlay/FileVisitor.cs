@@ -28,5 +28,43 @@ namespace TreeSitterPlay
             }
             return fileList;
         }
+
+        public static bool LoadFile(string fileName, ref string content)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    using (StreamReader sr = new StreamReader(fs, true))
+                    {
+                        content = sr.ReadToEnd();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception /*ex*/)
+            {
+                return false;
+            }
+        }
+
+        public static bool SaveFile(string fileName, string content)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs, Encoding.ASCII))
+                    {
+                        sw.Write(content);
+                        return true;
+                    }
+                }
+            }
+            catch(Exception /*ex*/)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -117,4 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Ctrl+O: Load and parse content from file
+Ctrl+S: Save content to file
+Alt+N: Clear Data
+Alt+V: Paste Data
+Alt+S: One click paste and parse data
+Alt+P: Parse Data
+Ctrl+Enter: Parse Data
+Alt+E: Expand All
+Alt+G: Collapse All
+</value>
+  </data>
 </root>
