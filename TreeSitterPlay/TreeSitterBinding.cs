@@ -1081,6 +1081,8 @@ namespace GitHub.TreeSitter
         public ushort field_id_for_name(string str) { return ts_language_field_id_for_name(Ptr, str, (uint)str.Length); }
         public TSSymbolType symbol_type(ushort symbol) { return ts_language_symbol_type(Ptr, symbol); }
 
+        public uint version() { return ts_language_version(Ptr); }
+
 #region PInvoke
         /**
         * Create a new query from a string containing one or more S-expression

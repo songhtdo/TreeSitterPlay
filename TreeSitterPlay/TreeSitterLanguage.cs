@@ -43,6 +43,8 @@ namespace TreeSitterPlay
             var handle = NativeLibrary.LoadLibrary(filename);
             if(handle == IntPtr.Zero)
             {
+                int ecode = Marshal.GetLastWin32Error();
+                Console.Write("error: {0}", ecode);
                 return null;
             }
             var rawFn = Path.GetFileNameWithoutExtension(filename);
@@ -63,9 +65,26 @@ namespace TreeSitterPlay
         {
             if(entry.dll_handle != IntPtr.Zero)
             {
+                if(entry.lang != null)
+                {
+                    entry.lang.Dispose();
+                    entry.lang = null;
+                }
                 NativeLibrary.FreeLibrary(entry.dll_handle);
                 entry.dll_handle = IntPtr.Zero;
                 entry.new_fn = null;
+            }
+        }
+
+        public static string getLanguageVersion(LanguageEntry entry)
+        {
+            using (var parser = new TSParser())
+            {
+                using (TSLanguage raw_lang = new TSLanguage(entry.new_fn()))
+                {
+                    parser.set_language(raw_lang);
+                    return raw_lang.version().ToString();
+                }
             }
         }
     }
@@ -78,6 +97,7 @@ namespace TreeSitterPlay
     {
         public IntPtr dll_handle;
         public NewLanguageDelegate new_fn;
+        public TSLanguage lang;
     }
     class PointRange
     {

@@ -23,6 +23,7 @@ namespace TreeSitterPlay
         private Dictionary<string, string> lang_mapping = null;
         private List<KeyValuePair<int, int>> srcRowLengths = new List<KeyValuePair<int, int>>();
         private LanguageEntry lang = null;
+        private TSTree root_tree = null;
         private List<TreeNode> matchedNodes = new List<TreeNode>();
         private List<MatchedPoint> matchedExprs = new List<MatchedPoint>();
         private int matchedNodePos = -1;
@@ -38,12 +39,12 @@ namespace TreeSitterPlay
             this.tsbtnCollapseAll.Click += TsbtnCollapseAll_Click;
             this.tsbtnNewData.Click += TsbtnNewData_Click;
             this.tsbtnAbout.Click += TsbtnAbout_Click;
-            this.tsbtnHelp.Click += TsbtnHelp_Click;
             this.tsbtnExit.Click += TsbtnExit_Click;
             this.rboHorizontal.CheckedChanged += RboHorizontal_CheckedChanged;
             this.rboVertical.CheckedChanged += RboVertical_CheckedChanged;
             this.cboLang.SelectedIndexChanged += CboLang_SelectedIndexChanged;
             this.tv.AfterSelect += Tv_AfterSelect;
+            this.tvQueryResult.AfterSelect += TvQueryResult_AfterSelect;
             this.tsbtnCopyTree.Click += TsbtnCopyTree_Click;
             this.tsbtnCopySExpr.Click += TsbtnCopySExpr_Click;
             this.cboNodes.SelectedIndexChanged += CboNodes_SelectedIndexChanged;
@@ -58,54 +59,66 @@ namespace TreeSitterPlay
             this.tsbtnNewInstance.Click += TsbtnNewInstance_Click;
             this.tsbtnLoadFile.Click += TsbtnLoadFile_Click;
             this.tsbtnSaveFile.Click += TsbtnSaveFile_Click;
+            this.btnQuery.Click += BtnQuery_Click;
         }
 
         ~TreeSiterPlayForm()
         {
-            this.keyFilter.UnRegisterAll();
+            this.keyFilter.StopFilter();
             if(this.lang != null)
             {
                 TreeSitterLanguage.releaseLanguage(this.lang);
             }
         }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if(this.keyFilter.PreFilterMessage(ref msg, keyData))
+            {
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
         private void TreeSiterPlayForm_Load(object sender, EventArgs e)
         {
             //注册事件
-            this.keyFilter = new KeyMessageFilter(this.Handle);
-            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.O, () =>
+            this.keyFilter = new KeyMessageFilter(this);
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.O, () =>
             {
                 this.tsbtnLoadFile.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.S, () =>
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.S, () =>
             {
                 this.tsbtnSaveFile.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.S, () =>
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.N, () => {
+                this.tsbtnNewData.PerformClick();
+            });
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.D, () =>
+            {
+                this.tsbtnNewData.PerformClick();
+            });
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.V, () =>
             {
                 this.tsbtnPaste.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.V, () =>
-            {
-                this.tsbtnNewData.PerformClick();
-                this.rtbx.Text = Clipboard.GetText();
-            });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Ctrl, Keys.Enter, () =>
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.Enter, () =>
             {
                 this.tsbtnParse.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.P, () =>
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.P, () =>
             {
                 this.tsbtnParse.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.E, () =>
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.Q, () =>
+            {
+                this.btnQuery.PerformClick();
+            });
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.E, () =>
             {
                 this.tsbtnExpandAll.PerformClick();
             });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.G, () => {
+            this.keyFilter.RegisterHotkey(Keys.Alt | Keys.G, () => {
                 this.tsbtnCollapseAll.PerformClick();
-            });
-            this.keyFilter.RegisterHotkey(KeyModifiers.Alt, Keys.N, () => {
-                this.tsbtnNewData.PerformClick();
             });
             this.keyFilter.StartFilter();
 
@@ -211,7 +224,13 @@ namespace TreeSitterPlay
                         this.ShowMessage(string.Format("Load Language failed, \n{0}", this.lang_mapping[selected_text]));
                         return;
                     }
+                    if(lang_entry.lang == null)
+                    {
+                        lang_entry.lang = new TSLanguage(lang_entry.new_fn());
+                    }
                     this.lang = lang_entry;
+                    this.tsslblLang.Text = selected_text;
+                    this.tsslblLangVer.Text = TreeSitterLanguage.getLanguageVersion(lang_entry);
                 }
             }
         }
@@ -245,13 +264,6 @@ namespace TreeSitterPlay
             this.rtbx.Text = Clipboard.GetText();
             this.tsbtnParse.PerformClick();
         }
-        private void TsbtnHelp_Click(object sender, EventArgs e)
-        {
-            using (HelpForm form = new HelpForm())
-            {
-                form.ShowDialog(this);
-            }
-        }
 
         private void TsbtnAbout_Click(object sender, EventArgs e)
         {
@@ -276,36 +288,23 @@ namespace TreeSitterPlay
         {
             this.ReparseData();
         }
-        private string formatPoint(PointRange pt_range)
-        {
-            return string.Format("[[{0},{1}],[{2},{3}]]",
-                   pt_range.start_pt.row, pt_range.start_pt.column, pt_range.end_pt.row, pt_range.end_pt.column);
-        }
-        private void bindingTree(TSLanguage raw_lang, string conent, TSNode node, TreeNodeCollection collection, HashSet<string> types)
+        private void bindingTree(string content, TSNode node, TreeNodeCollection collection, HashSet<string> types)
         {
             for (uint i = 0; i < node.child_count(); i++)
             {
                 var sub = node.child(i);
-                var new_range = new PointRange { start_pt = sub.start_point(), end_pt = sub.end_point(), text = sub.text(conent) };
-                var range_str = this.formatPoint(new_range);
-                string field_name = node.field_name_for_child(i);
-                string fullname = string.Empty;
-                string type = sub.type();
-                if (!string.IsNullOrWhiteSpace(field_name))
-                {
-                    fullname = string.Format("{0} : {1} {2}", field_name, type, range_str);
-                }
-                else
-                {
-                    fullname = string.Format("{0} {1}", type, range_str);
-                }
-                types.Add(type);
+
+                var new_range = sub.buildPointRange(content);
+                var range_str = new_range.formatString();
+                var fullname = sub.formatString(i, range_str);
+
+                types.Add(sub.type());
 
                 TreeNode newNode = new TreeNode(fullname);
                 newNode.Tag = new_range;
                 collection.Add(newNode);
 
-                this.bindingTree(raw_lang, conent, sub, newNode.Nodes, types);
+                this.bindingTree(content, sub, newNode.Nodes, types);
             }
         }
         private void CboNodes_SelectedIndexChanged(object sender, EventArgs e)
@@ -532,6 +531,84 @@ namespace TreeSitterPlay
 
             this.ShowMessage("The S-Expression data has been copied to the clipboard");
         }
+
+        private void BtnQuery_Click(object sender, EventArgs e)
+        {
+            Debug.Assert(this.lang.lang != null, "Query Language is null");
+            Debug.Assert(this.root_tree != null, "Query Tree is null.");
+            if (string.IsNullOrWhiteSpace(this.tbxQuery.Text))
+            {
+                this.ShowMessage("Query input textbox is empty.");
+                return;
+            }
+            this.tvQueryResult.Nodes.Clear();
+            this.lblCount.Text = "0";
+
+            string query_ctx = this.tbxQuery.Text.Trim();
+            uint error_offset = 0;
+            TSQueryError error_type = TSQueryError.TSQueryErrorNone;
+            var tsquery = this.lang.lang.query_new(query_ctx, out error_offset, out error_type);
+            if (error_type != TSQueryError.TSQueryErrorNone)
+            {
+                this.ShowMessage(string.Format("Query failed. error position: {0}, type: {1}", error_offset, error_type.ToString()));
+                return;
+            }
+            var tsquerycursor = new TSQueryCursor();
+            tsquerycursor.exec(tsquery, this.root_tree.root_node());
+
+            string conent = this.rtbx.Text;
+            uint count = 0;
+            TSQueryMatch matchcd = new TSQueryMatch();
+            TSQueryCapture[] captures = null;
+            while (tsquerycursor.next_match(out matchcd, out captures))
+            {
+                this.bindingMatched(count, matchcd, captures, conent);
+                count++;
+            }
+            this.tvQueryResult.ExpandAll();
+            this.lblCount.Text = count.ToString();
+            if(count == 0)
+            {
+                this.ShowMessage("No matching data was found.");
+            }
+        }
+        private void bindingMatched(uint pos, TSQueryMatch matched, TSQueryCapture[] captures, string content)
+        {
+            if (captures != null)
+            {
+                var currnode = this.tvQueryResult.Nodes.Add(string.Format("[{0}]", pos));
+                foreach (var sub in captures)
+                {
+                    var new_range = sub.node.buildPointRange(content);
+                    var range_str = new_range.formatString();
+                    var ppos = sub.node.findPositionByParent();
+                    var fullname = sub.node.formatString(ppos, range_str);
+
+                    TreeNode newNode = new TreeNode(fullname);
+                    newNode.Tag = new_range;
+                    currnode.Nodes.Add(newNode);
+
+                    this.bindingTree(sub.node, newNode.Nodes, content);
+                }
+            }
+        }
+
+        private void bindingTree(TSNode node, TreeNodeCollection collection, string content)
+        {
+            for (uint i = 0; i < node.child_count(); i++)
+            {
+                var sub = node.child(i);
+                var new_range = sub.buildPointRange(content);
+                var range_str = new_range.formatString();
+                var fullname = sub.formatString(i, range_str);
+
+                TreeNode subnewNode = new TreeNode(fullname);
+                subnewNode.Tag = new_range;
+                collection.Add(subnewNode);
+
+                this.bindingTree(sub, subnewNode.Nodes, content);
+            }
+        }
         private void Tv_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if(e.Node.Tag == null)
@@ -541,14 +618,31 @@ namespace TreeSitterPlay
             this.rtbx.ResetSelected();
 
             PointRange range_data = (PointRange)e.Node.Tag;
+            this.resetTreeViewAfterCheck(range_data);
+        }
+
+        private void TvQueryResult_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Tag == null)
+            {
+                return;
+            }
+            this.rtbx.ResetSelected();
+
+            PointRange range_data = (PointRange)e.Node.Tag;
+            this.resetTreeViewAfterCheck(range_data);
+        }
+
+        private void resetTreeViewAfterCheck(PointRange range_data)
+        {
             int total_start_pos = 0;
-            for(int i=0;i<this.srcRowLengths.Count;i++)
+            for (int i = 0; i < this.srcRowLengths.Count; i++)
             {
                 var curr = this.srcRowLengths[i];
-                if(i == range_data.start_pt.row)
+                if (i == range_data.start_pt.row)
                 {
                     int curr_length = 0;
-                    if(range_data.end_pt.row == range_data.start_pt.row)
+                    if (range_data.end_pt.row == range_data.start_pt.row)
                     {
                         curr_length = Convert.ToInt32(range_data.end_pt.column - range_data.start_pt.column);
                     }
@@ -558,21 +652,22 @@ namespace TreeSitterPlay
                     }
                     this.rtbx.UpdateSelected(total_start_pos + Convert.ToInt32(range_data.start_pt.column), curr_length);
                 }
-                else if(i > range_data.start_pt.row && i < range_data.end_pt.row)
+                else if (i > range_data.start_pt.row && i < range_data.end_pt.row)
                 {
                     this.rtbx.UpdateSelected(total_start_pos, curr.Value);
                 }
-                else if(i == range_data.end_pt.row)
+                else if (i == range_data.end_pt.row)
                 {
                     this.rtbx.UpdateSelected(total_start_pos, Convert.ToInt32(range_data.end_pt.column));
                 }
-                else if(i > range_data.end_pt.row)
+                else if (i > range_data.end_pt.row)
                 {
                     break;
                 }
                 total_start_pos += curr.Value;
             }
         }
+
         private void ClearFormData()
         {
             this.rtbx.Clear();
@@ -608,18 +703,20 @@ namespace TreeSitterPlay
             this.rtbx.ResetSelected();
             this.srcRowLengths = this.rtbx.ToRows();
 
-            var parser = new TSParser();
-            TSLanguage raw_lang = new TSLanguage(lang.new_fn());
-            parser.set_language(raw_lang);
-
-            var tree = parser.parse_string(null, this.rtbx.Text);
-            if (tree == null)
+            TSTree tree = null;
+            using (var parser = new TSParser())
             {
-                this.ShowMessage("Parse failed.");
-                return;
+                parser.set_language(this.lang.lang);
+                tree = parser.parse_string(null, this.rtbx.Text);
+                if (tree == null)
+                {
+                    this.ShowMessage("Parse failed.");
+                    return;
+                }
+                this.root_tree = tree;
             }
             HashSet<string> types = new HashSet<string>();
-            this.bindingTree(raw_lang, this.rtbx.Text, tree.root_node(), this.tv.Nodes, types);
+            this.bindingTree(this.rtbx.Text, tree.root_node(), this.tv.Nodes, types);
             this.tv.ExpandAll();
             //打印sexp
             var sexp = tree.root_node().to_string();

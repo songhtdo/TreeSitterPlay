@@ -27,5 +27,20 @@ namespace TreeSitterPlay
             var lib1 = prefix + @"\" + filename;
             return lib1;
         }
+        [DllImport("user32.dll")]
+        public static extern UInt32 RegisterHotKey(IntPtr hWnd, UInt32 id, UInt32 fsModifiers, UInt32 vk);
+
+        [DllImport("user32.dll")]
+        public static extern UInt32 UnregisterHotKey(IntPtr hWnd, UInt32 id);
+
+        [DllImport("kernel32.dll")]
+        public static extern UInt32 GlobalAddAtom(String lpString);
+
+        [DllImport("kernel32.dll")]
+        public static extern UInt32 GlobalDeleteAtom(UInt32 nAtom);
+        // MessageId
+        public const int WM_HOTKEY_MSG_ID = 0x0312;
+        // KeyDown id
+        public const int WM_KEYDOWN = 0x100;
     }
 }

@@ -30,14 +30,28 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeSiterPlayForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbtnNewInstance = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnNewData = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnLoadFile = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnSaveFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnPaste = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnParse = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCopyTree = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCopySExpr = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtnExpandAll = new System.Windows.Forms.ToolStripButton();
             this.tsbtnExpand = new System.Windows.Forms.ToolStripButton();
             this.tsbtnCollapse = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnCollapseAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtnAbout = new System.Windows.Forms.ToolStripButton();
+            this.tsbtnExit = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rtbx = new System.Windows.Forms.RichTextBox();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tv = new System.Windows.Forms.TreeView();
@@ -59,37 +73,48 @@
             this.cboExprs = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnPrevExpr = new System.Windows.Forms.Button();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.tbxQuery = new System.Windows.Forms.RichTextBox();
+            this.btnQuery = new System.Windows.Forms.Button();
+            this.lblCount = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tvQueryResult = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rboVertical = new System.Windows.Forms.RadioButton();
             this.rboHorizontal = new System.Windows.Forms.RadioButton();
             this.cboLang = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbtnNewInstance = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnNewData = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnLoadFile = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnSaveFile = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnPaste = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnParse = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCopyTree = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCopySExpr = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnExpandAll = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnCollapseAll = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnHelp = new System.Windows.Forms.ToolStripButton();
-            this.tsbtnExit = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslblLang = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslblLangVer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -114,24 +139,111 @@
             this.tsbtnCollapse,
             this.tsbtnCollapseAll,
             this.toolStripSeparator1,
-            this.tsbtnHelp,
             this.tsbtnAbout,
             this.tsbtnExit});
             this.toolStrip1.Location = new System.Drawing.Point(9, 9);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1522, 48);
+            this.toolStrip1.Size = new System.Drawing.Size(1529, 48);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbtnNewInstance
+            // 
+            this.tsbtnNewInstance.Image = global::TreeSitterPlay.Properties.Resources.new_instance;
+            this.tsbtnNewInstance.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnNewInstance.Name = "tsbtnNewInstance";
+            this.tsbtnNewInstance.Size = new System.Drawing.Size(129, 45);
+            this.tsbtnNewInstance.Text = "NewInstance";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 48);
+            // 
+            // tsbtnNewData
+            // 
+            this.tsbtnNewData.Image = global::TreeSitterPlay.Properties.Resources.clear;
+            this.tsbtnNewData.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnNewData.Name = "tsbtnNewData";
+            this.tsbtnNewData.Size = new System.Drawing.Size(101, 45);
+            this.tsbtnNewData.Text = "NewData";
+            this.tsbtnNewData.ToolTipText = "NewData\r\nAlt + N";
+            // 
+            // tsbtnLoadFile
+            // 
+            this.tsbtnLoadFile.Image = global::TreeSitterPlay.Properties.Resources.openfile;
+            this.tsbtnLoadFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnLoadFile.Name = "tsbtnLoadFile";
+            this.tsbtnLoadFile.Size = new System.Drawing.Size(93, 45);
+            this.tsbtnLoadFile.Text = "LoadFile";
+            this.tsbtnLoadFile.ToolTipText = "LoadFile\r\nAlt + O";
+            // 
+            // tsbtnSaveFile
+            // 
+            this.tsbtnSaveFile.Image = global::TreeSitterPlay.Properties.Resources.savefile;
+            this.tsbtnSaveFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnSaveFile.Name = "tsbtnSaveFile";
+            this.tsbtnSaveFile.Size = new System.Drawing.Size(91, 45);
+            this.tsbtnSaveFile.Text = "SaveFile";
+            this.tsbtnSaveFile.ToolTipText = "SaveFile\r\nAlt + S";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 48);
             // 
+            // tsbtnPaste
+            // 
+            this.tsbtnPaste.Image = global::TreeSitterPlay.Properties.Resources.paste;
+            this.tsbtnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnPaste.Name = "tsbtnPaste";
+            this.tsbtnPaste.Size = new System.Drawing.Size(71, 45);
+            this.tsbtnPaste.Text = "Paste";
+            this.tsbtnPaste.ToolTipText = "Paste\r\nAlt + V";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 48);
+            // 
+            // tsbtnParse
+            // 
+            this.tsbtnParse.Image = global::TreeSitterPlay.Properties.Resources.parse;
+            this.tsbtnParse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnParse.Name = "tsbtnParse";
+            this.tsbtnParse.Size = new System.Drawing.Size(71, 45);
+            this.tsbtnParse.Text = "Parse";
+            this.tsbtnParse.ToolTipText = "Parse\r\nAlt + P\r\nAlt + Enter";
+            // 
+            // tsbtnCopyTree
+            // 
+            this.tsbtnCopyTree.Image = global::TreeSitterPlay.Properties.Resources.copy;
+            this.tsbtnCopyTree.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCopyTree.Name = "tsbtnCopyTree";
+            this.tsbtnCopyTree.Size = new System.Drawing.Size(102, 45);
+            this.tsbtnCopyTree.Text = "CopyTree";
+            // 
+            // tsbtnCopySExpr
+            // 
+            this.tsbtnCopySExpr.Image = global::TreeSitterPlay.Properties.Resources.copysexpr;
+            this.tsbtnCopySExpr.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCopySExpr.Name = "tsbtnCopySExpr";
+            this.tsbtnCopySExpr.Size = new System.Drawing.Size(111, 45);
+            this.tsbtnCopySExpr.Text = "CopySExpr";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 48);
+            // 
+            // tsbtnExpandAll
+            // 
+            this.tsbtnExpandAll.Image = global::TreeSitterPlay.Properties.Resources.expand;
+            this.tsbtnExpandAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnExpandAll.Name = "tsbtnExpandAll";
+            this.tsbtnExpandAll.Size = new System.Drawing.Size(110, 45);
+            this.tsbtnExpandAll.Text = "Expand All";
+            this.tsbtnExpandAll.ToolTipText = "Expand All\r\nAlt + E";
             // 
             // tsbtnExpand
             // 
@@ -145,6 +257,15 @@
             this.tsbtnCollapse.Size = new System.Drawing.Size(125, 45);
             this.tsbtnCollapse.Text = "Collapse Node";
             // 
+            // tsbtnCollapseAll
+            // 
+            this.tsbtnCollapseAll.Image = global::TreeSitterPlay.Properties.Resources.collapse;
+            this.tsbtnCollapseAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnCollapseAll.Name = "tsbtnCollapseAll";
+            this.tsbtnCollapseAll.Size = new System.Drawing.Size(118, 45);
+            this.tsbtnCollapseAll.Text = "Collapse All";
+            this.tsbtnCollapseAll.ToolTipText = "Collapse All\r\nAlt + G";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -156,6 +277,14 @@
             this.tsbtnAbout.Name = "tsbtnAbout";
             this.tsbtnAbout.Size = new System.Drawing.Size(73, 45);
             this.tsbtnAbout.Text = "About...";
+            // 
+            // tsbtnExit
+            // 
+            this.tsbtnExit.Image = global::TreeSitterPlay.Properties.Resources.exit;
+            this.tsbtnExit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtnExit.Name = "tsbtnExit";
+            this.tsbtnExit.Size = new System.Drawing.Size(57, 45);
+            this.tsbtnExit.Text = "Exit";
             // 
             // splitContainer1
             // 
@@ -170,20 +299,39 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(1522, 602);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Size = new System.Drawing.Size(1529, 710);
             this.splitContainer1.SplitterDistance = 339;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 1;
             // 
             // rtbx
             // 
+            this.rtbx.AcceptsTab = true;
             this.rtbx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbx.Location = new System.Drawing.Point(0, 0);
             this.rtbx.Name = "rtbx";
-            this.rtbx.Size = new System.Drawing.Size(337, 600);
+            this.rtbx.Size = new System.Drawing.Size(337, 708);
             this.rtbx.TabIndex = 0;
             this.rtbx.Text = "";
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.tabControl1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.panel4);
+            this.splitContainer2.Size = new System.Drawing.Size(1185, 710);
+            this.splitContainer2.SplitterDistance = 846;
+            this.splitContainer2.TabIndex = 2;
             // 
             // tabControl1
             // 
@@ -195,7 +343,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1176, 600);
+            this.tabControl1.Size = new System.Drawing.Size(844, 708);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 1;
             // 
@@ -206,7 +354,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 36);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1168, 560);
+            this.tabPage1.Size = new System.Drawing.Size(836, 668);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tree Data";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -219,7 +367,7 @@
             this.tv.HotTracking = true;
             this.tv.Location = new System.Drawing.Point(3, 3);
             this.tv.Name = "tv";
-            this.tv.Size = new System.Drawing.Size(1162, 505);
+            this.tv.Size = new System.Drawing.Size(830, 613);
             this.tv.TabIndex = 0;
             // 
             // panel2
@@ -232,9 +380,9 @@
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.btnPrevNode);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(3, 508);
+            this.panel2.Location = new System.Drawing.Point(3, 616);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1162, 49);
+            this.panel2.Size = new System.Drawing.Size(830, 49);
             this.panel2.TabIndex = 2;
             // 
             // lblNodeTotal
@@ -311,7 +459,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 36);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1148, 560);
+            this.tabPage2.Size = new System.Drawing.Size(837, 668);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "S-Exprssion Data";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -321,7 +469,7 @@
             this.rtbxExpr.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbxExpr.Location = new System.Drawing.Point(3, 3);
             this.rtbxExpr.Name = "rtbxExpr";
-            this.rtbxExpr.Size = new System.Drawing.Size(1142, 505);
+            this.rtbxExpr.Size = new System.Drawing.Size(831, 613);
             this.rtbxExpr.TabIndex = 3;
             this.rtbxExpr.Text = "";
             // 
@@ -335,9 +483,9 @@
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.btnPrevExpr);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(3, 508);
+            this.panel3.Location = new System.Drawing.Point(3, 616);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1142, 49);
+            this.panel3.Size = new System.Drawing.Size(831, 49);
             this.panel3.TabIndex = 4;
             // 
             // lblExprTotal
@@ -407,6 +555,86 @@
             this.btnPrevExpr.Text = "Previous";
             this.btnPrevExpr.UseVisualStyleBackColor = true;
             // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.splitContainer3);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(333, 708);
+            this.panel4.TabIndex = 2;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.tbxQuery);
+            this.splitContainer3.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer3.Panel1.Controls.Add(this.label8);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.tvQueryResult);
+            this.splitContainer3.Size = new System.Drawing.Size(333, 708);
+            this.splitContainer3.SplitterDistance = 218;
+            this.splitContainer3.TabIndex = 0;
+            // 
+            // tbxQuery
+            // 
+            this.tbxQuery.AcceptsTab = true;
+            this.tbxQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbxQuery.Location = new System.Drawing.Point(0, 36);
+            this.tbxQuery.Name = "tbxQuery";
+            this.tbxQuery.Size = new System.Drawing.Size(333, 145);
+            this.tbxQuery.TabIndex = 0;
+            this.tbxQuery.Text = "";
+            // 
+            // btnQuery
+            // 
+            this.btnQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnQuery.Location = new System.Drawing.Point(23, 3);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(82, 31);
+            this.btnQuery.TabIndex = 0;
+            this.btnQuery.Text = "Search";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            // 
+            // lblCount
+            // 
+            this.lblCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCount.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblCount.Location = new System.Drawing.Point(266, 0);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(44, 37);
+            this.lblCount.TabIndex = 2;
+            this.lblCount.Text = "0";
+            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(186, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 37);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Result:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tvQueryResult
+            // 
+            this.tvQueryResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvQueryResult.Location = new System.Drawing.Point(0, 0);
+            this.tvQueryResult.Name = "tvQueryResult";
+            this.tvQueryResult.Size = new System.Drawing.Size(333, 486);
+            this.tvQueryResult.TabIndex = 0;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.rboVertical);
@@ -417,7 +645,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(9, 57);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1522, 53);
+            this.panel1.Size = new System.Drawing.Size(1529, 53);
             this.panel1.TabIndex = 2;
             // 
             // rboVertical
@@ -472,120 +700,82 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Layout:";
             // 
-            // toolStripSeparator4
+            // statusStrip1
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 48);
+            this.statusStrip1.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.tsslblLang,
+            this.toolStripStatusLabel2,
+            this.tsslblLangVer});
+            this.statusStrip1.Location = new System.Drawing.Point(9, 820);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1529, 26);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // tsbtnNewInstance
+            // toolStripStatusLabel1
             // 
-            this.tsbtnNewInstance.Image = global::TreeSitterPlay.Properties.Resources.new_instance;
-            this.tsbtnNewInstance.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnNewInstance.Name = "tsbtnNewInstance";
-            this.tsbtnNewInstance.Size = new System.Drawing.Size(129, 45);
-            this.tsbtnNewInstance.Text = "NewInstance";
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(144, 21);
+            this.toolStripStatusLabel1.Text = "Select Language: ";
             // 
-            // tsbtnNewData
+            // tsslblLang
             // 
-            this.tsbtnNewData.Image = global::TreeSitterPlay.Properties.Resources.clear;
-            this.tsbtnNewData.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnNewData.Name = "tsbtnNewData";
-            this.tsbtnNewData.Size = new System.Drawing.Size(101, 45);
-            this.tsbtnNewData.Text = "NewData";
+            this.tsslblLang.Name = "tsslblLang";
+            this.tsslblLang.Size = new System.Drawing.Size(0, 21);
             // 
-            // tsbtnLoadFile
+            // toolStripStatusLabel2
             // 
-            this.tsbtnLoadFile.Image = global::TreeSitterPlay.Properties.Resources.openfile;
-            this.tsbtnLoadFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnLoadFile.Name = "tsbtnLoadFile";
-            this.tsbtnLoadFile.Size = new System.Drawing.Size(93, 45);
-            this.tsbtnLoadFile.Text = "LoadFile";
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(123, 21);
+            this.toolStripStatusLabel2.Text = "  lang-version: ";
             // 
-            // tsbtnSaveFile
+            // tsslblLangVer
             // 
-            this.tsbtnSaveFile.Image = global::TreeSitterPlay.Properties.Resources.savefile;
-            this.tsbtnSaveFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnSaveFile.Name = "tsbtnSaveFile";
-            this.tsbtnSaveFile.Size = new System.Drawing.Size(91, 45);
-            this.tsbtnSaveFile.Text = "SaveFile";
+            this.tsslblLangVer.Name = "tsslblLangVer";
+            this.tsslblLangVer.Size = new System.Drawing.Size(0, 21);
             // 
-            // tsbtnPaste
+            // label8
             // 
-            this.tsbtnPaste.Image = global::TreeSitterPlay.Properties.Resources.paste;
-            this.tsbtnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnPaste.Name = "tsbtnPaste";
-            this.tsbtnPaste.Size = new System.Drawing.Size(71, 45);
-            this.tsbtnPaste.Text = "Paste";
+            this.label8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label8.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label8.Location = new System.Drawing.Point(0, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(333, 36);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Query";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tsbtnParse
+            // tableLayoutPanel1
             // 
-            this.tsbtnParse.Image = global::TreeSitterPlay.Properties.Resources.parse;
-            this.tsbtnParse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnParse.Name = "tsbtnParse";
-            this.tsbtnParse.Size = new System.Drawing.Size(71, 45);
-            this.tsbtnParse.Text = "Parse";
-            // 
-            // tsbtnCopyTree
-            // 
-            this.tsbtnCopyTree.Image = global::TreeSitterPlay.Properties.Resources.copy;
-            this.tsbtnCopyTree.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCopyTree.Name = "tsbtnCopyTree";
-            this.tsbtnCopyTree.Size = new System.Drawing.Size(102, 45);
-            this.tsbtnCopyTree.Text = "CopyTree";
-            // 
-            // tsbtnCopySExpr
-            // 
-            this.tsbtnCopySExpr.Image = global::TreeSitterPlay.Properties.Resources.copysexpr;
-            this.tsbtnCopySExpr.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCopySExpr.Name = "tsbtnCopySExpr";
-            this.tsbtnCopySExpr.Size = new System.Drawing.Size(111, 45);
-            this.tsbtnCopySExpr.Text = "CopySExpr";
-            // 
-            // tsbtnExpandAll
-            // 
-            this.tsbtnExpandAll.Image = global::TreeSitterPlay.Properties.Resources.expand;
-            this.tsbtnExpandAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnExpandAll.Name = "tsbtnExpandAll";
-            this.tsbtnExpandAll.Size = new System.Drawing.Size(110, 45);
-            this.tsbtnExpandAll.Text = "Expand All";
-            // 
-            // tsbtnCollapseAll
-            // 
-            this.tsbtnCollapseAll.Image = global::TreeSitterPlay.Properties.Resources.collapse;
-            this.tsbtnCollapseAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnCollapseAll.Name = "tsbtnCollapseAll";
-            this.tsbtnCollapseAll.Size = new System.Drawing.Size(118, 45);
-            this.tsbtnCollapseAll.Text = "Collapse All";
-            // 
-            // tsbtnHelp
-            // 
-            this.tsbtnHelp.Image = global::TreeSitterPlay.Properties.Resources.info;
-            this.tsbtnHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnHelp.Name = "tsbtnHelp";
-            this.tsbtnHelp.Size = new System.Drawing.Size(77, 45);
-            this.tsbtnHelp.Text = "Help...";
-            // 
-            // tsbtnExit
-            // 
-            this.tsbtnExit.Image = global::TreeSitterPlay.Properties.Resources.exit;
-            this.tsbtnExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtnExit.Name = "tsbtnExit";
-            this.tsbtnExit.Size = new System.Drawing.Size(57, 45);
-            this.tsbtnExit.Text = "Exit";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 48);
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.lblCount, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnQuery, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 3, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 181);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(333, 37);
+            this.tableLayoutPanel1.TabIndex = 3;
             // 
             // TreeSiterPlayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1540, 721);
+            this.ClientSize = new System.Drawing.Size(1547, 855);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.statusStrip1);
             this.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TreeSiterPlayForm";
@@ -597,6 +787,10 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -604,9 +798,18 @@
             this.tabPage2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -624,7 +827,6 @@
         private System.Windows.Forms.ToolStripButton tsbtnExpandAll;
         private System.Windows.Forms.ToolStripButton tsbtnCollapseAll;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton tsbtnHelp;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnNextNode;
         private System.Windows.Forms.ComboBox cboNodes;
@@ -662,6 +864,21 @@
         private System.Windows.Forms.ToolStripButton tsbtnSaveFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel tsslblLang;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel tsslblLangVer;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.RichTextBox tbxQuery;
+        private System.Windows.Forms.Button btnQuery;
+        private System.Windows.Forms.TreeView tvQueryResult;
+        private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label8;
     }
 }
 
